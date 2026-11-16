@@ -4,8 +4,6 @@ import (
 	"charm.land/bubbles/v2/textarea"
 	"charm.land/bubbles/v2/textinput"
 	tea "charm.land/bubbletea/v2"
-
-	"log"
 )
 
 const (
@@ -28,7 +26,8 @@ func NewModel(store *Store) model {
 	notes, err := store.GetNotes()
 	// log.Fatalf(notes[1].Body)
 	if err != nil {
-		log.Fatalf("unable to get notes: %v", err)
+		tea.Printf("unable to get notes: %v", err)
+		tea.Quit()
 	}
 
 	return model{
@@ -95,7 +94,8 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			case "ctrl+d":
 				notes, err := m.store.DeleteNote(m.notes[m.listIndex], m.notes, m.listIndex)
 				if err != nil {
-					log.Fatalf("error deleting note: %v\n", err)
+					tea.Printf("error deleting note: %v\n", err)
+					tea.Quit()
 				}
 
 				m.notes = notes
