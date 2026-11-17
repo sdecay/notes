@@ -24,7 +24,6 @@ type model struct {
 
 func NewModel(store *Store) model {
 	notes, err := store.GetNotes()
-	// log.Fatalf(notes[1].Body)
 	if err != nil {
 		tea.Printf("unable to get notes: %v", err)
 		tea.Quit()
@@ -92,13 +91,13 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.textarea.Focus()
 				m.textarea.CursorEnd()
 			case "ctrl+d":
-				notes, err := m.store.DeleteNote(m.notes[m.listIndex], m.notes, m.listIndex)
+				err := m.store.DeleteNote(&m.notes, m.listIndex)
 				if err != nil {
 					tea.Printf("error deleting note: %v\n", err)
 					tea.Quit()
 				}
 
-				m.notes = notes
+				// m.notes = notes
 				m.listIndex = 0
 				m.state = listView
 			}

@@ -72,15 +72,17 @@ func (s *Store) SaveNote(note Note) error {
 	return nil
 }
 
-func (s *Store) DeleteNote(note Note, notes []Note, index int) ([]Note, error) {
+// yay pointer fuckery
+func (s *Store) DeleteNote(notes *[]Note, index int) error {
 	sqlDelete := `delete from notes where id=?`
 
-	if _, err := s.conn.Exec(sqlDelete, note.Id); err != nil {
-		return nil, err
+	if _, err := s.conn.Exec(sqlDelete, (*notes)[index].Id); err != nil {
+		return err
 	}
 
-	// slice deletion
-	n := append(notes[:index], notes[index+1:]...)
+	// hopefully in-place pointer modification
+	st := *notes
+	*notes = append(st[:index], st[index+1:]...)
 
-	return n, nil
+	return nil
 }
