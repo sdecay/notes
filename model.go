@@ -1,6 +1,9 @@
 package main
 
 import (
+	// "sync"
+	// "time"
+
 	"charm.land/bubbles/v2/textarea"
 	"charm.land/bubbles/v2/textinput"
 	tea "charm.land/bubbletea/v2"
@@ -22,23 +25,32 @@ type model struct {
 	textinput textinput.Model
 }
 
-func NewModel(store *Store) model {
+func NewModel(store *Store, charLimit int) model {
 	notes, err := store.GetNotes()
 	if err != nil {
-		tea.Printf("unable to get notes: %v", err)
+		tea.Printf("Unable to get notes: %v", err)
 		tea.Quit()
 	}
+
+	ta := textarea.New()
+	ta.CharLimit = charLimit
 
 	return model{
 		store:     store,
 		state:     listView,
-		textarea:  textarea.New(),
+		textarea:  ta,
 		textinput: textinput.New(),
 		notes:     notes,
 	}
 }
 
+func (m model) setupTextArea() {
+	m.textarea = textarea.New()
+	m.textarea.CharLimit = 20
+}
+
 func (m model) Init() tea.Cmd {
+	m.setupTextArea()
 	return nil
 }
 
@@ -94,7 +106,6 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				err := m.store.DeleteNote(&m.notes, m.listIndex)
 				if err != nil {
 					tea.Printf("error deleting note: %v\n", err)
-					tea.Quit()
 				}
 
 				// m.notes = notes
@@ -127,18 +138,21 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				if m.currNote.Body != "" {
 					var err error
 					if err = m.store.SaveNote(m.currNote); err != nil {
-						// proper error handling
-						return m, tea.Quit
+						tea.Printf("Error saving note: %v", err)
 					}
 
 					m.notes, err = m.store.GetNotes()
 					if err != nil {
-						// proper error handling
-						return m, tea.Quit
+						tea.Printf("Error getting notes: %v", err)
 					}
 
 					m.currNote = Note{}
 					m.state = listView
+				} else {
+					// timer nonsense for fun
+					m.textarea.SetValue("Type something you turd!")
+					m.textarea.Focus()
+					m.textarea.CursorEnd()
 				}
 			case "esc":
 				m.state = listView

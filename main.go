@@ -11,11 +11,11 @@ func main() {
 		tea.Quit()
 	}
 
-	m := NewModel(store)
+	m := NewModel(store, 1024)
 
 	p := tea.NewProgram(m)
 	if _, err := p.Run(); err != nil {
-		tea.Printf("some shit went wonky: %v", err)
+		tea.Printf("Some shit went wonky: %v", err)
 		tea.Quit()
 	}
 }
