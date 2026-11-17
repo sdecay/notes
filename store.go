@@ -2,8 +2,9 @@ package main
 
 import (
 	"database/sql"
-	_ "github.com/mattn/go-sqlite3"
 	"time"
+
+	_ "github.com/mattn/go-sqlite3"
 )
 
 type Note struct {
@@ -48,7 +49,10 @@ func (s *Store) GetNotes() ([]Note, error) {
 
 	for rows.Next() {
 		note := Note{}
-		rows.Scan(&note.Id, &note.Title, &note.Body)
+		err := rows.Scan(&note.Id, &note.Title, &note.Body)
+		if err = rows.Err(); err != nil {
+			return nil, nil
+		}
 		notes = append(notes, note)
 	}
 
