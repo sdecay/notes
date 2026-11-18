@@ -1,8 +1,7 @@
 package main
 
 import (
-	// "sync"
-	// "time"
+	"strings"
 
 	"charm.land/bubbles/v2/textarea"
 	"charm.land/bubbles/v2/textinput"
@@ -32,8 +31,7 @@ func NewModel(store *Store, charLimit int) model {
 		tea.Quit()
 	}
 
-	ta := textarea.New()
-	ta.CharLimit = charLimit
+	ta := initTextArea(charLimit)
 
 	return model{
 		store:     store,
@@ -44,13 +42,15 @@ func NewModel(store *Store, charLimit int) model {
 	}
 }
 
-func (m model) setupTextArea() {
-	m.textarea = textarea.New()
-	m.textarea.CharLimit = 20
+func initTextArea(limit int) textarea.Model {
+	ta := textarea.New()
+	ta.CharLimit = limit
+	ta.Placeholder = "Say something, say something"
+
+	return ta
 }
 
 func (m model) Init() tea.Cmd {
-	m.setupTextArea()
 	return nil
 }
 
@@ -70,7 +70,6 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.KeyPressMsg:
 		key := msg.String()
 
-		// global ctrl+c to break out
 		switch key {
 		case "ctrl+esc":
 			return m, tea.Quit
@@ -156,6 +155,18 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				}
 			case "ctrl+c":
 				cmds = append(cmds, m.textarea.CopySelection())
+			case "ctrl+x":
+				// more stuff to do after copy so above method doesn't work
+				if m.textarea.HasSelection() {
+					selected := ""
+					selected = m.textarea.SelectedText()
+					cmds = append(cmds, m.textarea.CopySelection())
+					ns := strings.Replace(m.textarea.Value(), selected, "", 1)
+					m.textarea.SetValue(ns) // do something
+					m.textarea.CursorEnd()
+				}
+			case "ctrl+r":
+				m.textarea.SetValue("donkey porn ha ha")
 			case "esc":
 				m.state = listView
 			}

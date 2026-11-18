@@ -5,13 +5,15 @@ import (
 )
 
 func main() {
+	taLimit := 1024
+
 	store := new(Store)
 	if err := store.Init(); err != nil {
 		tea.Printf("Unable to init: %v", err)
 		tea.Quit()
 	}
 
-	m := NewModel(store, 1024)
+	m := NewModel(store, taLimit)
 
 	p := tea.NewProgram(m)
 	if _, err := p.Run(); err != nil {

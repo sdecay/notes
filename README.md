@@ -9,9 +9,10 @@ bubbletea needs better docs.
 
 ### TODO
 
-- duckdb.  Don't think I'd even have to change any code.
-- built in cut/paste even though you can do it with ctrl-shift-x/c
+- built in cut/copy even though you can do it with ctrl-shift-x/c
+    - copy done, ez pz
+    - paste done, less ez pz
 - style everything way better
 - get the werewolves out
 - hyperlink support
-- use bubble.list instead of rawdogging the list "widget"
+- use bubbles.list instead of rawdogging the list "widget"
