@@ -25,7 +25,7 @@ func (m model) View() tea.View {
 	if m.state == bodyView {
 		s += "Note:\n\n"
 		s += m.textarea.View() + "\n\n"
-		s += faintStyle.Render("ctrl+s - save, esc - discard")
+		s += faintStyle.Render("ctrl+s - save, ctrl+x/c - cut/copy selection, esc - discard")
 	}
 
 	if m.state == listView {

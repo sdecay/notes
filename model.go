@@ -154,19 +154,16 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 					m.textarea.CursorEnd()
 				}
 			case "ctrl+c":
-				cmds = append(cmds, m.textarea.CopySelection())
+				cmds = append(cmds, tea.SetClipboard(m.textarea.SelectedText()))
 			case "ctrl+x":
 				// more stuff to do after copy so above method doesn't work
 				if m.textarea.HasSelection() {
-					selected := ""
-					selected = m.textarea.SelectedText()
-					cmds = append(cmds, m.textarea.CopySelection())
+					selected := m.textarea.SelectedText()
+					cmds = append(cmds, tea.SetClipboard(m.textarea.SelectedText()))
 					ns := strings.Replace(m.textarea.Value(), selected, "", 1)
 					m.textarea.SetValue(ns) // do something
 					m.textarea.CursorEnd()
 				}
-			case "ctrl+r":
-				m.textarea.SetValue("donkey porn ha ha")
 			case "esc":
 				m.state = listView
 			}
