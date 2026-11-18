@@ -39,13 +39,13 @@ func (m model) View() tea.View {
 			if len(shortBody) > 30 {
 				shortBody = shortBody[:30]
 			}
-			s += enumeratorStyle.Render(prefix) + n.Title + " | " + faintStyle.Render(shortBody) + "\n\n"
+			s += enumeratorStyle.Render(prefix) + n.Title + "\n" + faintStyle.Render(shortBody) + "\n\n"
 		}
 		s += faintStyle.Render("n - new note, ctrl+d - delete note, q - quit")
 	}
 
 	v := tea.NewView(s)
-	v.AltScreen = true
+	v.AltScreen = false
 
 	return v
 }

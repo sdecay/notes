@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"time"
 
-	_ "github.com/mattn/go-sqlite3"
+	_ "github.com/duckdb/duckdb-go/v2"
 )
 
 type Note struct {
@@ -19,7 +19,7 @@ type Store struct {
 
 func (s *Store) Init() error {
 	var err error
-	s.conn, err = sql.Open("sqlite3", "./notes.db")
+	s.conn, err = sql.Open("duckdb", "./notes.db2")
 	if err != nil {
 		return err
 	}

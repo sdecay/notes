@@ -72,7 +72,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 		// global ctrl+c to break out
 		switch key {
-		case "ctrl+c":
+		case "ctrl+esc":
 			return m, tea.Quit
 		}
 
@@ -154,6 +154,8 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 					m.textarea.Focus()
 					m.textarea.CursorEnd()
 				}
+			case "ctrl+c":
+				cmds = append(cmds, m.textarea.CopySelection())
 			case "esc":
 				m.state = listView
 			}
