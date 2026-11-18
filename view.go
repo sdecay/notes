@@ -8,9 +8,10 @@ import (
 )
 
 var (
-	appNameStyle    = lipgloss.NewStyle().Background(lipgloss.Color("#19d6c9")).Foreground(lipgloss.Color("#0b5b56")).Padding(0, 1)
-	faintStyle      = lipgloss.NewStyle().Foreground(lipgloss.Color("255")).Faint(true)
-	enumeratorStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("99")).MarginRight(1)
+	// general
+	appNameStyle = lipgloss.NewStyle().Background(lipgloss.Color("#19d6c9")).Foreground(lipgloss.Color("#0b5b56")).Padding(0, 1)
+	faintStyle   = lipgloss.NewStyle().Foreground(lipgloss.Color("255")).Faint(true)
+	listStyle    = lipgloss.NewStyle().Foreground(lipgloss.Color("99")).MarginRight(1)
 )
 
 func (m model) View() tea.View {
@@ -39,7 +40,7 @@ func (m model) View() tea.View {
 			if len(shortBody) > 30 {
 				shortBody = shortBody[:30]
 			}
-			s += enumeratorStyle.Render(prefix) + n.Title + "\n" + faintStyle.Render(shortBody) + "\n\n"
+			s += listStyle.Render(prefix) + n.Title + "\n" + faintStyle.Render(shortBody) + "\n\n"
 		}
 		s += faintStyle.Render("n - new note, ctrl+d - delete note, q - quit")
 	}

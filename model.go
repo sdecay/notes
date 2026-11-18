@@ -6,6 +6,7 @@ import (
 	"charm.land/bubbles/v2/textarea"
 	"charm.land/bubbles/v2/textinput"
 	tea "charm.land/bubbletea/v2"
+	"charm.land/lipgloss/v2"
 )
 
 const (
@@ -43,9 +44,21 @@ func NewModel(store *Store, charLimit int) model {
 }
 
 func initTextArea(limit int) textarea.Model {
+	taTextStyle := lipgloss.NewStyle().Foreground(lipgloss.Color("#a2009b"))
+	taBaseStyle := lipgloss.NewStyle().Border(lipgloss.RoundedBorder()).BorderForeground(lipgloss.Color("#19d6c9")).Padding(0, 1)
+
 	ta := textarea.New()
 	ta.CharLimit = limit
+	ta.ShowLineNumbers = false
 	ta.Placeholder = "Say something, say something"
+
+	taStyles := ta.Styles()
+	taStyles.Focused.Base = taBaseStyle
+	taStyles.Blurred.Base = taBaseStyle
+	taStyles.Focused.Text = taTextStyle
+	taStyles.Blurred.Text = taTextStyle
+
+	ta.SetStyles(taStyles)
 
 	return ta
 }
